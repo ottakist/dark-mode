@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react'
+import data from './data'
+import Article from './Article'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+  const [theme,setMode] = useState(()=>{
+    let storagedTheme = localStorage.getItem('theme')
+    return storagedTheme || 'light-mode'
+  })
+  useEffect(()=>{
+    document.documentElement.className = theme;
+    localStorage.setItem('theme', theme);
+  },[theme])
+ 
+  const toggleMode =()=>{
+    setMode(theme === 'light-mode'?'dark-mode':'light-mode');
+  }
+  return (<main>
+    <div className="nav-center">
+      <h1>Darkmode</h1>
+      <button className="btn" onClick={()=>toggleMode()}>toggle</button>
     </div>
-  );
+    <section className="articles">
+      {data.map((article)=>{
+        return(
+          <Article key={article.id} {...article}/>
+        )
+      })}
+    </section>
+  </main>)
 }
 
-export default App;
+export default App
